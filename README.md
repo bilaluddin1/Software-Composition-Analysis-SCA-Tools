@@ -13,3 +13,5 @@ Sample configurations and usage examples
 Comparative insights between tools (e.g., Dependabot, OWASP Dependency-Check, Snyk, etc.)
 
 Best practices for securing your software supply chain
+📁 Tools will be added over time, stay tuned!
+
