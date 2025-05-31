@@ -1,0 +1,18 @@
+alerts=$(curl -s -H "Accept: application/vnd.github+json" \
+               -H "Authorization: Bearer $GITHUB_TOKEN" \
+               "https://api.github.com/repos/(Organization-name)/$(basename `git rev-parse --show-toplevel`)/dependabot/alerts")
+
+if [ $(basename `git rev-parse --show-toplevel`) == "" ]; then
+    echo ""
+    vulns=$(echo "$alerts" | jq -r '.[] | select(.security_advisory.severity == "critical" and .security_advisory.cve_id != "CVE-2025-24813" and .security_vulnerability.first_patched_version != null and .state != "fixed" and .dependency.scope == "runtime") | "\nSeverity: \(.security_advisory.severity)\nPackage: \(.dependency.package.name)\nAffected Versions: \(.security_vulnerability.vulnerable_version_range)\nPatched Version: \(.security_vulnerability.first_patched_version.identifier)"')
+else
+    vulns=$(echo "$alerts" | jq -r '.[] | select(.security_advisory.severity == "critical" and .security_vulnerability.first_patched_version != null and .state != "fixed" and .dependency.scope == "runtime") | "\nSeverity: \(.security_advisory.severity)\nPackage: \(.dependency.package.name)\nAffected Versions: \(.security_vulnerability.vulnerable_version_range)\nPatched Version: \(.security_vulnerability.first_patched_version.identifier)"')
+fi
+
+if [ -n "$vulns" ]; then
+    echo "❌ Dependabot alerts found! Failing CI."
+    echo "$vulns"
+    exit 1
+else
+    echo "✅ No Critical Dependabot alerts found. Proceeding with CI."
+fi
