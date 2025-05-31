@@ -1,4 +1,4 @@
-# Software-Composition-Analysis-SCA-tools
+# Software-Composition-Analysis (SCA) Tools
 This repository is dedicated to hosting and showcasing Software Composition Analysis (SCA) tools. SCA tools help identify vulnerabilities, outdated packages, and license compliance issues in third-party and open-source dependencies used within your application.
 
 🔍 What is SCA?
